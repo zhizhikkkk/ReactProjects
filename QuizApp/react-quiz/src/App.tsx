@@ -3,7 +3,7 @@ import {Difficulty, fetchQuizQuestions, QuestionState} from "./API";
 import QuestionCard from "./components/QuestionCard";
 
 
-type AnswerObject = {
+export type AnswerObject = {
     question:string,
     answer:string,
     correct:boolean,
@@ -41,11 +41,32 @@ function App() {
     };
 
   const checkAnswer = (e:React.MouseEvent<HTMLButtonElement>)=>{
+    if(!gameOver){
+        const answer = e.currentTarget.value
+        const correct = questions[number].correct_answer===answer
+        if(correct){
+            setScore(prev=>prev+1)
+        }
 
+        const answerObject={
+            question :questions[number].question,
+            answer,
+            correct,
+            correctAnswer: questions[number].correct_answer
+        }
+        setUserAnswers(prev=>[...prev,answerObject])
+    }
   }
 
   const nextQuestion = ()=>{
+    const nextQuestion = number+1;
 
+    if(nextQuestion===TOTAL_QUESTIONS){
+        setGameOver(true)
+    }
+    else{
+        setNumber(nextQuestion)
+    }
   }
 
   return (
@@ -57,7 +78,7 @@ function App() {
           </button>
       ):null}
 
-      {!gameOver? <p className={"score"}>Score:</p> :null}
+      {!gameOver? <p className={"score"}>Score:{score}</p> :null}
       {!loading && <p>Loading Questions...</p>}
         {!loading && !gameOver && (
             <QuestionCard
@@ -69,8 +90,10 @@ function App() {
                 callback={checkAnswer}
             />
         )}
+        {!gameOver && !loading && userAnswers.length===number+1 && number!== TOTAL_QUESTIONS-1 ?(
+            <button className={"next"} onClick={nextQuestion}>NextQuestion</button>
+        ) :null}
 
-      <button className={"next"} onClick={nextQuestion}>NextQuestion</button>
     </div>
   );
 }
