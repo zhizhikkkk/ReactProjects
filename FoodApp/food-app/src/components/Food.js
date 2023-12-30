@@ -3,6 +3,27 @@ import {data} from '../data/data.js'
 
 function Food(props) {
     const [foods,setFoods]=useState(data)
+
+    const filterType =(category)=>{
+        setFoods(
+            data.filter((item)=>{
+                return item.category===category;
+            })
+        )
+    }
+
+    const sortCard = (price) => {
+        const sortedData = [...data].sort((a, b) => {
+            return Number(a[price]) - Number(b[price]);
+        });
+        setFoods(sortedData);
+    };
+    const sortCardD = (price) => {
+        const sortedData = [...data].sort((a, b) => {
+            return Number(b[price]) - Number(a[price]);
+        });
+        setFoods(sortedData);
+    };
     return (
         <div className='max-w-[1640px] m-auto px-4 py-12'>
             <h1 className='text-red-500 font-bold text-4xl text-center'>Top Rated Menu Items</h1>
@@ -12,23 +33,21 @@ function Food(props) {
                 <div>
                     <p className='font-bold text-gray-700'>Filter Type</p>
                     <div className='flex justify-between flex-wrap border-red-500  '>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>All</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Fruits</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Berries</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Exotic</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Citrus</button>
+                        <button onClick={()=>setFoods(data)} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>All</button>
+                        <button onClick={()=>filterType('fruits')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Fruits</button>
+                        <button onClick={()=>filterType('berries')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Berries</button>
+                        <button onClick={()=>filterType('exotic')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Exotic</button>
+                        <button onClick={()=>filterType('citrus')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Citrus</button>
                     </div>
                 </div>
 
                 {/*Filter Price*/}
                 <div>
-                    <p className='font-bold text-gray-700'>Filter Price</p>
+                    <p className='font-bold text-gray-700'>Sort by  Price</p>
 
                     <div className='flex justify-betweeen max-w-[390px] w-full'>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>$</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>$$</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>$$$</button>
-                        <button className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>$$$$</button>
+                        <button onClick={()=>sortCard('price')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Ascending</button>
+                        <button onClick={()=>sortCardD('price')} className='m-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>Descending</button>
                     </div>
                 </div>
             </div>
